@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'instagram_story.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'instagram_story',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': 'password',
+        'NAME': 'instagramstory$instagram_storys',
+        'HOST': 'instagramstory.mysql.pythonanywhere-services.com',
+        'USER': 'instagramstory',
+        'PASSWORD': 'Mksoni18091',
     },
 }
 
