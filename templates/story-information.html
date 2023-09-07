@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <style>
+            body {
+                background: #f5f5f5;
+                font-family: 'Helvetica Neue', sans-serif;
+            }
+
+            .card {
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .title {
+                font-size: 24px;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .subtitle {
+                font-size: 18px;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .btn-primary {
+                background: #6c63ff;
+                border: none;
+            }
+        </style>
+
+        <title>Story Information</title>
+    </head>
+
+    <body>
+
+        <div class="container my-5 px-5">
+
+            <div class="row">
+                {% for i, s in categorized_data.items %}
+                    <div class="col-lg-6 mx-auto mb-4">
+                        <div class="card py-3 px-4">
+
+                            <h4 class="title mb-4">{{ i }}</h4>
+
+                            <div class="subtitle mt-4 mb-2">Information</div>
+
+                            <div class="row">
+                                {% for datas in s %}
+                                    <div class="col-md-12">
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <a class="btn btn-primary btn-sm" href="{{ datas.Link }}" target="_blank" >Play Video</a>
+                                                <p class="mt-3 mb-3"><b>Story time:</b>{{ datas.Time }}</p>
+                                                {% if datas.Tag %}
+                                                    <p class="mb-0"><b>Tagged Users:</b>{{ datas.Tag }}</p>
+                                                {% endif %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </body>
+</html>
