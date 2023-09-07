@@ -6,15 +6,16 @@ import requests
 
 import pymysql
 
-db_host = 'localhost'
-db_user = 'root'
-db_password = 'password'
-db_name = 'instagram_story'
-table_name = 'User_StoryModel'
+db_host = 'instagramstory.mysql.pythonanywhere-services.com'
+db_user = 'instagramstory'
+db_password = 'Mksoni18091'
+db_name = 'instagramstory$instagram_storys'
+table_name = 'User_storymodel'
 
 
 def db_connection():
     connection = pymysql.connect(host=db_host, user=db_user, db=db_name, password=db_password, charset='utf8mb4')
+    # print(connection)
     return connection
 
 
@@ -129,16 +130,15 @@ def req_login(csrf_token):
 
 
 def main_file():
-    print('Login Start..')
-    csrf_token = main_req()
-    cookies = req_login(csrf_token)
-    print('Login Completed..')
-    # while True:
-    print('Start Scraping')
-    get_story_list(cookies)
-    print('Finish Scraping')
-    # time.sleep(10)
-        # time.sleep((60 * 60) * 23)
+    while True:
+        print('Login Start..')
+        csrf_token = main_req()
+        cookies = req_login(csrf_token)
+        print('Login Completed..')
+        print('Start Scraping')
+        get_story_list(cookies)
+        print('Finish Scraping')
+        time.sleep((60 * 60) * 5)
 
 
 def get_story_list(cookies):
@@ -205,7 +205,7 @@ def get_story_list(cookies):
             except Exception as e:
                 print(f'Function Error At :: {e}')
     random_name = generate_random_name()
-    with open(f"Story_{random_name}.json", "w") as outfile:
+    with open(f"Story.json", "w") as outfile:
         json.dump(final_data, outfile)
 
 
