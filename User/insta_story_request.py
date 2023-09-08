@@ -148,7 +148,13 @@ def main_file():
             get_story_list(cookies)
             print('End Scraping')
             insert_data(final_all_data)
-            time.sleep((60 * 60) * 5)
+            time.sleep((60 * 60) * 2)
+            print('3 Hour Remaining')
+            time.sleep((60 * 60) * 2)
+            print('1 Hour Remaining')
+            time.sleep((60 * 60) * 0.5)
+            print('30 Minutes Remaining')
+            time.sleep((60 * 60) * 0.5)
             if count == 3:
                 break
             count += 1
