@@ -136,17 +136,22 @@ def req_login(csrf_token):
 
 def main_file():
     while True:
-        global final_all_data
-        final_all_data = []
         print('Login Start..')
         csrf_token = main_req()
         cookies = req_login(csrf_token)
         print('Login Completed..')
-        print('Start Scraping')
-        get_story_list(cookies)
-        print('Finish Scraping')
-        insert_data(final_all_data)
-        time.sleep((60 * 60) * 5)
+        count = 1
+        while True:
+            global final_all_data
+            final_all_data = []
+            print('Start Scraping')
+            get_story_list(cookies)
+            print('End Scraping')
+            insert_data(final_all_data)
+            time.sleep((60 * 60) * 5)
+            if count == 3:
+                break
+            count += 1
 
 
 def get_story_list(cookies):
