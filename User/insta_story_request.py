@@ -140,7 +140,7 @@ def main_file():
         csrf_token = main_req()
         cookies = req_login(csrf_token)
         print('Login Completed..')
-        count = 1
+        count = 2
         while True:
             global final_all_data
             final_all_data = []
