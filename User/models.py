@@ -7,3 +7,4 @@ class StoryModel(models.Model):
     story_id = models.BigIntegerField(unique=True)
     story_link = models.TextField(null=True)
     tag_list = models.TextField(null=True)
+    testing_time = models.DateField(blank=True, null=True)

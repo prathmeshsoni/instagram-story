@@ -12,10 +12,15 @@ db_password = 'Mksoni18091'
 db_name = 'instagramstory$instagram_storys'
 table_name = 'User_storymodel'
 
+# db_host = 'localhost'
+# db_user = 'root'
+# db_password = 'password'
+# db_name = 'instagram_story'
+# table_name = 'user_storymodel'
+
 
 def db_connection():
     connection = pymysql.connect(host=db_host, user=db_user, db=db_name, password=db_password, charset='utf8mb4')
-    # print(connection)
     return connection
 
 
@@ -24,11 +29,11 @@ def insert_data(item):
     cursor = con.cursor()
 
     insert_stmt = (
-        f"INSERT IGNORE INTO {table_name} (username, story_time, story_id, story_link, tag_list) "
-        "VALUES (%s, %s, %s, %s, %s)"
+        f"INSERT IGNORE INTO {table_name} (username, story_time, story_id, story_link, tag_list, testing_time) "
+        "VALUES (%s, %s, %s, %s, %s, %s)"
     )
     try:
-        cursor.executemany(insert_stmt, [item])
+        cursor.executemany(insert_stmt, item)
         con.commit()
     except Exception as e:
         print(f"Error while Data INSERT from {table_name}")
@@ -131,6 +136,8 @@ def req_login(csrf_token):
 
 def main_file():
     while True:
+        global final_all_data
+        final_all_data = []
         print('Login Start..')
         csrf_token = main_req()
         cookies = req_login(csrf_token)
@@ -138,6 +145,7 @@ def main_file():
         print('Start Scraping')
         get_story_list(cookies)
         print('Finish Scraping')
+        insert_data(final_all_data)
         time.sleep((60 * 60) * 5)
 
 
@@ -284,7 +292,8 @@ def get_story_details(cookies, pk, user_names, media_ids):
                     pass
 
         temp_time = k['expiring_at']
-        story_time = convert_unix_timestamp(int(temp_time))
+        story_time, testing_time = convert_unix_timestamp(int(temp_time))
+        global final_all_data
 
         temp_item = {
             'story_time': story_time,
@@ -299,9 +308,10 @@ def get_story_details(cookies, pk, user_names, media_ids):
             story_time,
             story_id,
             video_url,
-            tags
+            tags,
+            testing_time
         )
-        insert_data(temp_items)
+        final_all_data.append(temp_items)
 
         total_story.append(temp_item)
     return total_story
@@ -319,7 +329,7 @@ def convert_unix_timestamp(timestamp):
     # Format the datetime object as a string
     formatted_time = dt_object.strftime("%A, %B %d, %Y %I:%M:%S %p")
 
-    return formatted_time
+    return formatted_time, dt_object.strftime("%Y-%m-%d")
 
 
 if __name__ == '__main__':

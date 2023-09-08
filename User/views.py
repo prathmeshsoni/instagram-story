@@ -1,31 +1,41 @@
-from django.http import JsonResponse
 from django.shortcuts import render
-
+import datetime
 from User.models import StoryModel
 
 
-def p_data(hid):
-    obj = StoryModel.objects.filter(username=hid)
+def p_data(hid, times):
+    if hid:
+        obj = StoryModel.objects.filter(
+            username=hid,
+            testing_time__day=times.day,
+            testing_time__month=times.month,
+            testing_time__year=times.year,
+        )
+    else:
+        if times:
+            obj = StoryModel.objects.filter(
+                testing_time__day=times.day,
+                testing_time__month=times.month,
+                testing_time__year=times.year,
+            )
+        else:
+            obj = StoryModel.objects.all()
     data = []
     for i in obj:
         items = {
             'Time': i.story_time,
             'Link': i.story_link,
-            'Tag': i.tag_list
+            'Tag': i.tag_list,
+            'main_time': i.testing_time
         }
         data.append(items)
 
     return data
 
 
-def particular_data(request, hid):
-    response = p_data(hid)
-
-    return response
-
-
-def particular_data_1(request, hid):
-    response = p_data(hid)
+def test(hid):
+    current_date = datetime.datetime.now()
+    response = p_data(hid, current_date)
     categorized_data = {
         hid: response
     }
@@ -33,40 +43,127 @@ def particular_data_1(request, hid):
     datas = {
         'categorized_data': categorized_data
     }
+    return datas
+
+
+def particular_data(request, hid):
+    try:
+        try:
+            int(hid)
+            con = 1
+        except:
+            try:
+                tess = hid.split('-')
+                if len(tess) == 3:
+                    con = 2
+                else:
+                    con = 3
+            except:
+                con = 3
+
+        if con == 3:
+            datas = test(hid)
+        else:
+            datas = test_1(hid)
+    except:
+        datas = {
+            'Nodata': "Nodata"
+        }
 
     return render(request, 'story-information.html', datas)
 
 
-def a_data():
-    categorized_data = {}
+def test_1(hid):
+    try:
+        tests = hid.split('-')
+    except:
+        tests = ''
+    if len(tests) != 3:
+        hid = ''
+    else:
+        hid = datetime.datetime.strptime(hid, '%Y-%m-%d')
+    response = a_data('', hid)
 
-    obj = StoryModel.objects.all()
+    datas = {
+        'categorized_data': response
+    }
+    return datas
+
+
+def a_data(hid, times):
+    categorized_data = {}
+    if not hid:
+        if times:
+            obj = StoryModel.objects.filter(
+                testing_time__day=times.day,
+                testing_time__month=times.month,
+                testing_time__year=times.year,
+            )
+        else:
+            obj = StoryModel.objects.all()
+    else:
+        if times:
+            obj = StoryModel.objects.filter(
+                username=hid,
+                testing_time__day=times.day,
+                testing_time__month=times.month,
+                testing_time__year=times.year,
+            )
+        else:
+            obj = StoryModel.objects.filter(
+                username=hid,
+            )
+
     for i in obj:
         username = i.username
         if username in categorized_data:
-            categorized_data[username].append({'Time': i.story_time, 'Link': i.story_link, 'Tag': i.tag_list})
+            categorized_data[username].append(
+                {'Time': i.story_time, 'Link': i.story_link, 'Tag': i.tag_list, 'main_time': i.testing_time}
+            )
         else:
             categorized_data[username] = [{
                 'Time': i.story_time,
                 'Link': i.story_link,
-                'Tag': i.tag_list
+                'Tag': i.tag_list,
+                'main_time': i.testing_time
             }]
     return categorized_data
 
 
 def all_data(request):
-    categorized_data = a_data()
+    try:
+        current_date = datetime.datetime.now()
+        categorized_data = a_data('', current_date)
 
-    response = JsonResponse(categorized_data, safe=False)
+        datas = {
+            'categorized_data': categorized_data
+        }
+    except:
+        datas = {
+            'categorized_data': ''
+        }
 
-    return response
+    return render(request, 'story-information.html', datas)
 
 
-def all_data_1(request):
-    categorized_data = a_data()
+def all_data_1(request, hid, sid):
+    try:
+        try:
+            tests = sid.split('-')
+        except:
+            tests = ''
+        if len(tests) != 3:
+            sid = ''
+        else:
+            sid = datetime.datetime.strptime(sid, '%Y-%m-%d')
+        categorized_data = a_data(hid, sid)
 
-    datas = {
-        'categorized_data': categorized_data
-    }
+        datas = {
+            'categorized_data': categorized_data
+        }
+    except:
+        datas = {
+            'categorized_data': ''
+        }
 
     return render(request, 'story-information.html', datas)

@@ -19,9 +19,7 @@ from django.urls import path
 from User.views import *
 
 urlpatterns = [
-    path('<str:hid>/', particular_data_1),
-    path('', all_data_1),
-    path('<str:hid>/0/', particular_data),
-    path('alldata/1/', all_data),
-
+    path('<str:hid>/', particular_data),
+    path('<str:hid>/<str:sid>/', all_data_1),
+    path('', all_data),
 ]

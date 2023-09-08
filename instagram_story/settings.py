@@ -74,6 +74,16 @@ WSGI_APPLICATION = 'instagram_story.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'instagram_story',
+#         'HOST': 'localhost',
+#         'USER': 'root',
+#         'PASSWORD': 'password',
+#     },
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

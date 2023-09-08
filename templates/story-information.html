@@ -48,36 +48,60 @@
         <div class="container my-5 px-5">
 
             <div class="row">
-                {% for i, s in categorized_data.items %}
-                    <div class="col-lg-6 mx-auto mb-4">
-                        <div class="card py-3 px-4">
+                {% if categorized_data %}
+                    {% for i, s in categorized_data.items %}
+                        <div class="col-lg-6 mx-auto mb-4">
+                            <div class="card py-3 px-4">
+                                <a href="/{{ i }}/1/" class="navbar-brand" >
+                                    <h4 class="title mb-4">{{ i }}</h4>
+                                </a>
+                                {% if s %}
+                                    <div class="subtitle mt-4 mb-2">Information</div>
 
-                            <h4 class="title mb-4">{{ i }}</h4>
+                                    <div class="row">
+                                        {% for datas in s %}
+                                            <div class="col-md-12">
+                                                <div class="card mb-3">
+                                                    <div class="card-body">
+                                                        <a class="btn btn-primary btn-sm" href="{{ datas.Link }}" target="_blank" >Play Video</a>
+                                                        <a href="/{{ i }}/{{ datas.main_time|date:"Y-m-d" }}/" style="text-decoration: none; color: black;" ><p class="mt-3 mb-3"><b>Story time:</b>{{ datas.Time }}</p></a>
+                                                        {% if datas.Tag %}
+                                                            <p class="mb-0"><b>Tagged Users:</b>{{ datas.Tag }}</p>
+                                                        {% endif %}
 
-                            <div class="subtitle mt-4 mb-2">Information</div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                            <div class="row">
-                                {% for datas in s %}
-                                    <div class="col-md-12">
-                                        <div class="card mb-3">
-                                            <div class="card-body">
-                                                <a class="btn btn-primary btn-sm" href="{{ datas.Link }}" target="_blank" >Play Video</a>
-                                                <p class="mt-3 mb-3"><b>Story time:</b>{{ datas.Time }}</p>
-                                                {% if datas.Tag %}
-                                                    <p class="mb-0"><b>Tagged Users:</b>{{ datas.Tag }}</p>
-                                                {% endif %}
-
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <h1>
+                                                        No Data
+                                                    </h1>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
+                                {% endif %}
 
                             </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-lg-6 mx-auto mb-4 text-center text-uppercase">
+                        <div class="card py-3 px-4">
+
+                            <h1 class="">No Data</h1>
+
 
                         </div>
                     </div>
-                {% endfor %}
-
+                {% endif %}
             </div>
 
         </div>
