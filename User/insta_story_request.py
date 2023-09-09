@@ -3,7 +3,7 @@ import random
 import string
 import time
 import requests
-
+import os
 import pymysql
 
 db_host = 'instagramstory.mysql.pythonanywhere-services.com'
@@ -29,21 +29,37 @@ def insert_data(item):
     cursor = con.cursor()
 
     insert_stmt = (
-        f"INSERT IGNORE INTO {table_name} (username, story_time, story_id, story_link, tag_list, testing_time) "
+        f"INSERT INTO {table_name} (username, story_time, story_id, story_link, tag_list, testing_time) "
         "VALUES (%s, %s, %s, %s, %s, %s)"
     )
     try:
         cursor.executemany(insert_stmt, item)
         con.commit()
+        return cursor.lastrowid
     except Exception as e:
         print(f"Error while Data INSERT from {table_name}")
+        return False
 
 
-def generate_random_name():
-    letters = string.ascii_lowercase
-    name_length = random.randint(6, 7)
-    random_name = ''.join(random.choice(letters) for _ in range(name_length))
-    return random_name
+def update_data(s_id, s_path):
+    con = db_connection()
+    cursor = con.cursor()
+
+    insert_stmt = (
+        f"UPDATE {table_name} "
+        f"SET `story_link` = %s "
+        f"WHERE id = %s"
+    )
+    update_value = (
+        s_path,
+        s_id
+    )
+    try:
+        cursor.executemany(insert_stmt, [update_value])
+        con.commit()
+        print('Insert Data')
+    except Exception as e:
+        print(f"Error while Data INSERT from {e}")
 
 
 def main_req():
@@ -65,7 +81,7 @@ def main_req():
     response = session.get('https://www.instagram.com/', headers=headers)
     try:
         csrf_token = response.text.split('csrf_token\\":\\"')[1].split('\\')[0]
-        print(f"Csrf Token Found")
+        # print(f"Csrf Token Found")
 
     except Exception as e:
         print(f"Csrf Token Not Found :: {e}")
@@ -134,32 +150,6 @@ def req_login(csrf_token):
     return cookies
 
 
-def main_file():
-    while True:
-        print('Login Start..')
-        csrf_token = main_req()
-        cookies = req_login(csrf_token)
-        print('Login Completed..')
-        count = 2
-        while True:
-            global final_all_data
-            final_all_data = []
-            print('Start Scraping')
-            get_story_list(cookies)
-            print('End Scraping')
-            insert_data(final_all_data)
-            time.sleep((60 * 60) * 2)
-            print('3 Hour Remaining')
-            time.sleep((60 * 60) * 2)
-            print('1 Hour Remaining')
-            time.sleep((60 * 60) * 0.5)
-            print('30 Minutes Remaining')
-            time.sleep((60 * 60) * 0.5)
-            if count == 3:
-                break
-            count += 1
-
-
 def get_story_list(cookies):
     headers = {
         'authority': 'www.instagram.com',
@@ -209,7 +199,7 @@ def get_story_list(cookies):
         print(f'Tray Not Found : {e}')
     final_data = []
     if tray:
-        print(f'Tray = {len(tray)}')
+        # print(f'Tray = {len(tray)}')
         for n in tray:
             try:
                 pk = n['user']['pk']
@@ -220,10 +210,9 @@ def get_story_list(cookies):
                     user_names: texts
                 }
                 final_data.append(temp_text)
-                print(f'Finish {user_names}')
+                # print(f'Finish {user_names}')
             except Exception as e:
                 print(f'Function Error At :: {e}')
-    random_name = generate_random_name()
     with open(f"Story.json", "w") as outfile:
         json.dump(final_data, outfile)
 
@@ -282,11 +271,14 @@ def get_story_details(cookies, pk, user_names, media_ids):
             story_id = ''
         try:
             video_url = k['video_versions'][0]['url']
+            video = 1
         except:
             try:
                 video_url = k['image_versions2']['candidates'][0]['url']
+                video = 0
             except:
                 video_url = ''
+                video = 2
         if not video_url:
             print('')
         try:
@@ -304,7 +296,6 @@ def get_story_details(cookies, pk, user_names, media_ids):
 
         temp_time = k['expiring_at']
         story_time, testing_time = convert_unix_timestamp(int(temp_time))
-        global final_all_data
 
         temp_item = {
             'story_time': story_time,
@@ -322,7 +313,24 @@ def get_story_details(cookies, pk, user_names, media_ids):
             tags,
             testing_time
         )
-        final_all_data.append(temp_items)
+        test_con = insert_data([temp_items])
+        if test_con:
+            if video_url:
+                # path = os.path.join('C:\\prathmesh\\update_project\\instagram-story\\uploads', user_names)
+                path = os.path.join('/home/instagramstory/instagram-story/uploads', user_names)
+                try:
+                    os.mkdir(path)
+                except:
+                    pass
+                video_text = requests.get(video_url).content
+                if video == 1:
+                    with open(f"{path}/{story_id}.mp4", 'wb') as f:
+                        f.write(video_text)
+                    update_data(test_con, f'uploads/{user_names}/{story_id}.mp4')
+                else:
+                    with open(f"{path}/{story_id}.png", 'wb') as f:
+                        f.write(video_text)
+                    update_data(test_con, f'uploads/{user_names}/{story_id}.png')
 
         total_story.append(temp_item)
     return total_story
@@ -331,16 +339,39 @@ def get_story_details(cookies, pk, user_names, media_ids):
 def convert_unix_timestamp(timestamp):
     from datetime import datetime, timedelta
 
-    # Convert the timestamp to a datetime object
     dt_object = datetime.fromtimestamp(timestamp)
 
-    # Subtract the specified number of days
     dt_object -= timedelta(days=1)
 
-    # Format the datetime object as a string
     formatted_time = dt_object.strftime("%A, %B %d, %Y %I:%M:%S %p")
 
     return formatted_time, dt_object.strftime("%Y-%m-%d")
+
+
+def main_file():
+    while True:
+        print('Login Start..')
+        csrf_token = main_req()
+        cookies = req_login(csrf_token)
+        print('Login Completed..')
+        count = 2
+        while True:
+            get_story_list(cookies)
+            print('4 Hour Remaining')
+            time.sleep(60 * 60)
+            print('3 Hour Remaining')
+            time.sleep(60 * 60)
+            print('2 Hour Remaining')
+            time.sleep(60 * 60)
+            print('1 Hour Remaining')
+            time.sleep((60 * 60) * 0.5)
+            print('30 Minutes Remaining')
+            time.sleep((60 * 60) * 0.5)
+            print('Start Soon....')
+
+            if count == 3:
+                break
+            count += 1
 
 
 if __name__ == '__main__':
