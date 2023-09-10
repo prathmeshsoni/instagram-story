@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import datetime
 from User.models import StoryModel
+from pytz import timezone
 
 
 def p_data(hid, times):
@@ -34,7 +35,7 @@ def p_data(hid, times):
 
 
 def test(hid):
-    current_date = datetime.datetime.now()
+    current_date = datetime.datetime.now(timezone("Asia/Kolkata"))
     response = p_data(hid, current_date)
     categorized_data = {
         hid: response
@@ -132,7 +133,7 @@ def a_data(hid, times):
 
 def all_data(request):
     try:
-        current_date = datetime.datetime.now()
+        current_date = datetime.datetime.now(timezone("Asia/Kolkata"))
         categorized_data = a_data('', current_date)
 
         datas = {

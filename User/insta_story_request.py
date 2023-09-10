@@ -37,7 +37,7 @@ def insert_data(item):
         con.commit()
         return cursor.lastrowid
     except Exception as e:
-        print(f"Error while Data INSERT from {table_name}")
+        # print(f"Error while Data INSERT from {table_name}")
         return False
 
 
@@ -59,7 +59,8 @@ def update_data(s_id, s_path):
         con.commit()
         print('Insert Data')
     except Exception as e:
-        print(f"Error while Data INSERT from {e}")
+        pass
+        # print(f"Error while Data INSERT from {e}")
 
 
 def main_req():
@@ -322,15 +323,19 @@ def get_story_details(cookies, pk, user_names, media_ids):
                     os.mkdir(path)
                 except:
                     pass
-                video_text = requests.get(video_url).content
-                if video == 1:
-                    with open(f"{path}/{story_id}.mp4", 'wb') as f:
-                        f.write(video_text)
-                    update_data(test_con, f'uploads/{user_names}/{story_id}.mp4')
-                else:
-                    with open(f"{path}/{story_id}.png", 'wb') as f:
-                        f.write(video_text)
-                    update_data(test_con, f'uploads/{user_names}/{story_id}.png')
+                try:
+                    video_text = requests.get(video_url)
+                    if video_text.status_code == 200:
+                        if video == 1:
+                            with open(f"{path}/{story_id}.mp4", 'wb') as f:
+                                f.write(video_text.content)
+                            update_data(test_con, f'uploads/{user_names}/{story_id}.mp4')
+                        else:
+                            with open(f"{path}/{story_id}.png", 'wb') as f:
+                                f.write(video_text.content)
+                            update_data(test_con, f'uploads/{user_names}/{story_id}.png')
+                except:
+                    pass
 
         total_story.append(temp_item)
     return total_story
@@ -338,14 +343,25 @@ def get_story_details(cookies, pk, user_names, media_ids):
 
 def convert_unix_timestamp(timestamp):
     from datetime import datetime, timedelta
+    import pytz
 
-    dt_object = datetime.fromtimestamp(timestamp)
+    server_timezone='UTC'
+    local_timezone='Asia/Kolkata'
+    server_tz = pytz.timezone(server_timezone)
+    dt_server = datetime.fromtimestamp(timestamp, tz=server_tz)
 
-    dt_object -= timedelta(days=1)
+    # Subtract one day from the datetime object
+    dt_server -= timedelta(days=1)
 
-    formatted_time = dt_object.strftime("%A, %B %d, %Y %I:%M:%S %p")
+    # Convert the datetime object to the local timezone
+    local_tz = pytz.timezone(local_timezone)
+    dt_local = dt_server.astimezone(local_tz)
 
-    return formatted_time, dt_object.strftime("%Y-%m-%d")
+    # Format the datetime object as a string
+    formatted_time = dt_local.strftime("%d %B %Y %I:%M %p %A")
+    formatted_date = dt_local.strftime("%Y-%m-%d")
+
+    return formatted_time, formatted_date
 
 
 def main_file():
