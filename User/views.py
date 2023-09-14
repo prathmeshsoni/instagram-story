@@ -113,7 +113,7 @@ def a_data(hid, times):
         else:
             obj = StoryModel.objects.filter(
                 username=hid,
-            )
+            ).order_by('-testing_time')
 
     for i in obj:
         username = i.username
@@ -128,6 +128,11 @@ def a_data(hid, times):
                 'Tag': i.tag_list,
                 'main_time': i.testing_time
             }]
+
+
+    categorized_data = dict(sorted(categorized_data.items(), key=lambda item: datetime.strptime(item[0][3], "%d %B")))
+
+
     return categorized_data
 
 
