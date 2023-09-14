@@ -11,16 +11,16 @@ def p_data(hid, times):
             testing_time__day=times.day,
             testing_time__month=times.month,
             testing_time__year=times.year,
-        )
+        ).order_by('-testing_time')
     else:
         if times:
             obj = StoryModel.objects.filter(
                 testing_time__day=times.day,
                 testing_time__month=times.month,
                 testing_time__year=times.year,
-            )
+            ).order_by('-testing_time')
         else:
-            obj = StoryModel.objects.all()
+            obj = StoryModel.objects.all().order_by('-testing_time')
     data = []
     for i in obj:
         items = {
@@ -99,9 +99,9 @@ def a_data(hid, times):
                 testing_time__day=times.day,
                 testing_time__month=times.month,
                 testing_time__year=times.year,
-            )
+            ).order_by('-testing_time')
         else:
-            obj = StoryModel.objects.all()
+            obj = StoryModel.objects.all().order_by('-testing_time')
     else:
         if times:
             obj = StoryModel.objects.filter(
@@ -128,9 +128,6 @@ def a_data(hid, times):
                 'Tag': i.tag_list,
                 'main_time': i.testing_time
             }]
-
-
-    categorized_data = dict(sorted(categorized_data.items(), key=lambda item: datetime.strptime(item[0][3], "%d %B")))
 
 
     return categorized_data
