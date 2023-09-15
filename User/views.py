@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
 import datetime
-from User.models import StoryModel
+
+from django.shortcuts import render, redirect
 from pytz import timezone
+
 from User.insta_story_request import main_file_1
+from User.models import StoryModel
 
 
 def p_data(hid, times):
@@ -69,7 +71,8 @@ def particular_data(request, hid):
             datas = test_1(hid)
     except:
         datas = {
-            'Nodata': "Nodata"
+            'Nodata': "Nodata",
+            'count': 0
         }
 
     return render(request, 'story-information.html', datas)
@@ -87,7 +90,8 @@ def test_1(hid):
     response = a_data('', hid)
 
     datas = {
-        'categorized_data': response
+        'categorized_data': response[0],
+        'count': response[1]
     }
     return datas
 
@@ -130,21 +134,22 @@ def a_data(hid, times):
                 'main_time': i.testing_time
             }]
 
-
-    return categorized_data
+    return categorized_data, len(obj)
 
 
 def all_data(request):
     try:
         current_date = datetime.datetime.now(timezone("Asia/Kolkata"))
-        categorized_data = a_data('', current_date)
+        categorized_data, count = a_data('', current_date)
 
         datas = {
-            'categorized_data': categorized_data
+            'categorized_data': categorized_data,
+            'count': count
         }
     except:
         datas = {
-            'categorized_data': ''
+            'categorized_data': '',
+            'count': 0
         }
 
     return render(request, 'story-information.html', datas)
@@ -160,14 +165,16 @@ def all_data_1(request, hid, sid):
             sid = ''
         else:
             sid = datetime.datetime.strptime(sid, '%Y-%m-%d')
-        categorized_data = a_data(hid, sid)
+        categorized_data, count = a_data(hid, sid)
 
         datas = {
-            'categorized_data': categorized_data
+            'categorized_data': categorized_data,
+            'count': count
         }
     except:
         datas = {
-            'categorized_data': ''
+            'categorized_data': '',
+            'count': 0
         }
 
     return render(request, 'story-information.html', datas)
