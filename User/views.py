@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import datetime
 from User.models import StoryModel
 from pytz import timezone
+from User.insta_story_request import main_file_1
 
 
 def p_data(hid, times):
@@ -170,3 +171,8 @@ def all_data_1(request, hid, sid):
         }
 
     return render(request, 'story-information.html', datas)
+
+
+def run(request):
+    main_file_1()
+    return redirect('/')

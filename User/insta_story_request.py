@@ -1,6 +1,4 @@
 import json
-import random
-import string
 import time
 import requests
 import os
@@ -64,6 +62,7 @@ def update_data(s_id, s_path):
 
 
 def main_req():
+    global session
     headers = {
         'authority': 'www.instagram.com',
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -92,6 +91,7 @@ def main_req():
 
 
 def req_login(csrf_token):
+    global session
     cookies = {
         'csrftoken': f'{csrf_token}',
         'mid': 'ZPm_EwALAAEIhlau9qmmZGACHrCP',
@@ -152,6 +152,7 @@ def req_login(csrf_token):
 
 
 def get_story_list(cookies):
+    global session
     headers = {
         'authority': 'www.instagram.com',
         'accept': '*/*',
@@ -219,6 +220,7 @@ def get_story_list(cookies):
 
 
 def get_story_details(cookies, pk, user_names, media_ids):
+    global session
     headers = {
         'authority': 'www.instagram.com',
         'accept': '*/*',
@@ -388,6 +390,16 @@ def main_file():
             if count == 3:
                 break
             count += 1
+
+
+def main_file_1():
+    global session
+    session = requests.Session()
+    print('Login Start..')
+    csrf_token = main_req()
+    cookies = req_login(csrf_token)
+    print('Login Completed..')
+    get_story_list(cookies)
 
 
 if __name__ == '__main__':
