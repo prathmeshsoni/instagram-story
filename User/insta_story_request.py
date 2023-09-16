@@ -27,8 +27,8 @@ def insert_data(item):
     cursor = con.cursor()
 
     insert_stmt = (
-        f"INSERT INTO {table_name} (username, story_time, story_id, story_link, tag_list, testing_time) "
-        "VALUES (%s, %s, %s, %s, %s, %s)"
+        f"INSERT INTO {table_name} (username, story_time, story_id, story_link, tag_list, testing_time, media_path) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s)"
     )
     try:
         cursor.executemany(insert_stmt, item)
@@ -266,7 +266,25 @@ def get_story_details(cookies, pk, user_names, media_ids):
     items = json_text['reels'][f"{params['reel_ids']}"]['items']
 
     total_story = []
+    try:
+        media_path = json_text['reels'][f"{params['reel_ids']}"]['user']['profile_pic_url']
 
+        # i_path = os.path.join('C:\\prathmesh\\update_project\\instagram-story\\uploads', pk)
+        i_path = os.path.join('/home/instagramstory/instagram-story/uploads', pk)
+        try:
+            os.mkdir(i_path)
+            try:
+                media_text = requests.get(media_path)
+                if media_text.status_code == 200:
+                    with open(f"{i_path}/{user_names}.png", 'wb') as f:
+                        f.write(media_text.content)
+                    media_path = f"uploads/{pk}/{user_names}.png"
+            except:
+                pass
+        except:
+            pass
+    except:
+        media_path = f"uploads/{pk}/{user_names}.png"
     for k in items:
         try:
             story_id = k['pk']
@@ -296,7 +314,6 @@ def get_story_details(cookies, pk, user_names, media_ids):
                     tags.append(t_username)
                 except:
                     pass
-
         temp_time = k['expiring_at']
         story_time, testing_time = convert_unix_timestamp(int(temp_time))
 
@@ -314,7 +331,8 @@ def get_story_details(cookies, pk, user_names, media_ids):
             story_id,
             video_url,
             tags,
-            testing_time
+            testing_time,
+            media_path
         )
         test_con = insert_data([temp_items])
         if test_con:

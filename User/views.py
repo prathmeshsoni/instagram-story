@@ -30,7 +30,7 @@ def p_data(hid, times):
             'Time': i.story_time,
             'Link': i.story_link,
             'Tag': i.tag_list,
-            'main_time': i.testing_time
+            'main_time': i
         }
         data.append(items)
 
@@ -51,6 +51,8 @@ def test(hid):
 
 
 def particular_data(request, hid):
+    unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
+
     try:
         try:
             int(hid)
@@ -69,13 +71,17 @@ def particular_data(request, hid):
             datas = test(hid)
         else:
             datas = test_1(hid)
+        datas['unique_usernames'] = unique_usernames
+        datas['hid'] = hid
     except:
         datas = {
             'Nodata': "Nodata",
-            'count': 0
+            'count': 0,
+            'unique_usernames': unique_usernames,
+            'hid': hid
         }
 
-    return render(request, 'story-information.html', datas)
+    return render(request, 'insta.html', datas)
 
 
 def test_1(hid):
@@ -124,38 +130,44 @@ def a_data(hid, times):
         username = i.username
         if username in categorized_data:
             categorized_data[username].append(
-                {'Time': i.story_time, 'Link': i.story_link, 'Tag': i.tag_list, 'main_time': i.testing_time}
+                {'Time': i.story_time, 'Link': i.story_link, 'Tag': i.tag_list, 'main_time': i}
             )
         else:
             categorized_data[username] = [{
                 'Time': i.story_time,
                 'Link': i.story_link,
                 'Tag': i.tag_list,
-                'main_time': i.testing_time
+                'main_time': i
             }]
 
     return categorized_data, len(obj)
 
 
 def all_data(request):
+    unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
+
     try:
         current_date = datetime.datetime.now(timezone("Asia/Kolkata"))
         categorized_data, count = a_data('', current_date)
 
         datas = {
             'categorized_data': categorized_data,
-            'count': count
+            'count': count,
+            'unique_usernames': unique_usernames
         }
     except:
         datas = {
             'categorized_data': '',
-            'count': 0
+            'count': 0,
+            'unique_usernames': unique_usernames
         }
 
-    return render(request, 'story-information.html', datas)
+    return render(request, 'insta.html', datas)
 
 
 def all_data_1(request, hid, sid):
+    unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
+
     try:
         try:
             tests = sid.split('-')
@@ -169,15 +181,19 @@ def all_data_1(request, hid, sid):
 
         datas = {
             'categorized_data': categorized_data,
-            'count': count
+            'count': count,
+            'unique_usernames': unique_usernames,
+            'hid': hid
         }
     except:
         datas = {
             'categorized_data': '',
-            'count': 0
+            'count': 0,
+            'unique_usernames': unique_usernames,
+            'hid': hid
         }
 
-    return render(request, 'story-information.html', datas)
+    return render(request, 'insta.html', datas)
 
 
 def run(request):
