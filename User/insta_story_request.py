@@ -563,9 +563,12 @@ def final_otp(request, verificationCode):
     headers = request.session.get('headers')
     response = request.session.get('response')
     cookies = request.session.get('cookies')
-    del request.session['cookies']
-    del request.session['headers']
-    del request.session['response']
+    try:
+        del request.session['cookies']
+        del request.session['headers']
+        del request.session['response']
+    except:
+        pass
 
     headers['referer'] = 'https://www.instagram.com/accounts/login/two_factor?next=%2F'
     data = {
@@ -584,10 +587,26 @@ def final_otp(request, verificationCode):
         data=data,
     )
 
-    temp = response.cookies._cookies['.instagram.com']['/']
-    cookies = {}
-    for i in temp:
-        cookies[temp[i].name] = temp[i].value
+    try:
+        temp = response.cookies._cookies['.instagram.com']['/']
+        cookies = {}
+        for i in temp:
+            cookies[temp[i].name] = temp[i].value
+    except:
+        cookies = {}
+        for i in response.headers._store['set-cookie'][1].split(';'):
+            val = i.strip().split('=')
+            try:
+                keys = val[0].split(',')[1].strip()
+            except:
+                try:
+                    keys = val[0]
+                except:
+                    pass
+            try:
+                cookies[keys] = val[1]
+            except:
+                pass
 
     return cookies
 
