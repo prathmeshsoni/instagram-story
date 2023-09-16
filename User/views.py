@@ -45,7 +45,8 @@ def test(hid):
     }
 
     datas = {
-        'categorized_data': categorized_data
+        'categorized_data': categorized_data,
+        'count': len(response)
     }
     return datas
 
