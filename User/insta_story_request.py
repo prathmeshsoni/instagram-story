@@ -586,6 +586,21 @@ def final_otp(request, verificationCode):
         headers=headers,
         data=data,
     )
+    try:
+        with open(f"test.test", "w") as outfile:
+            outfile.write(f'{response.text},  {response.status_code}, {response.cookies._cookies}')
+    except:
+        pass
+    try:
+        with open(f"test1.test", "w") as outfile:
+            outfile.write(f'{response.text},  {response.status_code}, {response.headers._store}')
+    except:
+        pass
+    try:
+        with open(f"test.test", "w") as outfile:
+            outfile.write(f'{response.text},  {response.status_code}')
+    except:
+        pass
 
     try:
         temp = response.cookies._cookies['.instagram.com']['/']
@@ -594,19 +609,22 @@ def final_otp(request, verificationCode):
             cookies[temp[i].name] = temp[i].value
     except:
         cookies = {}
-        for i in response.headers._store['set-cookie'][1].split(';'):
-            val = i.strip().split('=')
-            try:
-                keys = val[0].split(',')[1].strip()
-            except:
+        try:
+            for i in response.headers._store['set-cookie'][1].split(';'):
+                val = i.strip().split('=')
                 try:
-                    keys = val[0]
+                    keys = val[0].split(',')[1].strip()
+                except:
+                    try:
+                        keys = val[0]
+                    except:
+                        pass
+                try:
+                    cookies[keys] = val[1]
                 except:
                     pass
-            try:
-                cookies[keys] = val[1]
-            except:
-                pass
+        except:
+            cookies = {}
 
     return cookies
 
