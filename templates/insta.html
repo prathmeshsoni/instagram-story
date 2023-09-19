@@ -22,7 +22,11 @@
 
         <!-- google font -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
-
+        <style>
+            .test-hover:hover{
+                background-color: rgb(31 224 208 / var(--tw-bg-opacity));
+            }
+        </style>
     </head>
     <body>
 
@@ -82,14 +86,14 @@
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 absolute left-3 bottom-1/2 translate-y-1/2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                                             </svg>
-                                            <input type="text" placeholder="Search {{ count }}" name="search_username" class="bg-transparen w-full !pl-10 !py-2 !rounded-lg">
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <input type="text" placeholder="OTP" name="verificationCode" class="bg-transparen w-full !pl-10 !py-2 !rounded-lg">
+                                            <input type="text" placeholder="Search {{ count }}" name="search_username" class="bg-transparen w-full !pl-10 !py-2 !rounded-lg" required>
+{#                                            <br>#}
+{#                                            <br>#}
+{#                                            <br>#}
+{#                                            <input type="text" placeholder="OTP" name="verificationCode" class="bg-transparen w-full !pl-10 !py-2 !rounded-lg">#}
                                         </div>
 
-                                        <input type="submit" placeholder="Search" class="bg-emerald-200  w-full !py-2 !rounded-lg">
+                                        <input type="submit" placeholder="Search" class="bg-emerald-200  w-full !py-2 !rounded-lg cursor-pointer test-hover">
                                     </div>
                                     {% csrf_token %}
                                 </form>

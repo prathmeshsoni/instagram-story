@@ -153,17 +153,17 @@ def all_data(request):
     unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
     if request.method == 'POST':
         search_username = "".join(request.POST.get('search_username')).strip().lower()
-        verificationCode = request.POST.get('verificationCode')
-        if not verificationCode:
-            datas = intsa_story().main_file_prathmesh(search_username)
-            if datas:
-                datas['unique_usernames'] = unique_usernames
-                return render(request, 'insta.html', datas)
-            else:
-                return redirect(f'/{search_username}/')
-        else:
-            datas = dual_fun(search_username)
+        # verificationCode = request.POST.get('verificationCode')
+        # if not verificationCode:
+        datas = intsa_story().main_file_prathmesh(search_username)
+        if datas:
+            datas['unique_usernames'] = unique_usernames
             return render(request, 'insta.html', datas)
+        else:
+            return redirect(f'/{search_username}/')
+        # else:
+        #     datas = dual_fun(search_username)
+        #     return render(request, 'insta.html', datas)
     else:
         try:
             current_date = datetime.datetime.now(timezone("Asia/Kolkata"))
