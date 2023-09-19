@@ -19,7 +19,7 @@ from django.urls import path
 from User.views import *
 
 urlpatterns = [
-    path('otp/', otp),
+    # path('otp/', otp),
     path('<str:hid>/', particular_data),
     path('<str:hid>/<str:sid>/', all_data_1),
     path('', all_data),

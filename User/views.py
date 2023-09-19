@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render, redirect
 from pytz import timezone
 
-from User.insta_story_request import main_file_2, main_file_1
+from User.insta_story_request import intsa_story
 from User.models import StoryModel
 
 
@@ -154,8 +154,8 @@ def all_data(request):
     if request.method == 'POST':
         search_username = "".join(request.POST.get('search_username')).strip().lower()
         verificationCode = request.POST.get('verificationCode')
-        if verificationCode:
-            datas = main_file_2(request, verificationCode, search_username)
+        if not verificationCode:
+            datas = intsa_story().main_file_prathmesh(search_username)
             if datas:
                 datas['unique_usernames'] = unique_usernames
                 return render(request, 'insta.html', datas)
@@ -218,7 +218,7 @@ def all_data_1(request, hid, sid):
 def run(request):
     unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
 
-    check = main_file_1('')
+    check = intsa_story().main_file()
     if check:
         check['unique_usernames'] = unique_usernames
         return render(request, 'insta.html', check)
@@ -227,8 +227,9 @@ def run(request):
 
 
 def otp(request):
-    cookies, headers, response = main_file_2(request, '', '')
-    request.session['cookies'] = cookies
-    request.session['headers'] = headers
-    request.session['response'] = response
-    return redirect('/')
+    pass
+    # cookies, headers, response = main_file_2(request, '', '')
+    # request.session['cookies'] = cookies
+    # request.session['headers'] = headers
+    # request.session['response'] = response
+    # return redirect('/')
