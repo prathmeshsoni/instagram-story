@@ -203,6 +203,10 @@
                                                         <a class="inline-block rounded-lg px-4 py-1.5 text-sm font-semibold bg-secondery" href="/{{ datas.Link }}" target="_blank">
                                                             Play Video
                                                         </a>
+                                                        <a class="inline-block rounded-lg px-4 py-1.5 text-sm font-semibold bg-secondery ml-4" href="#" onclick="Delete('{{ datas.Link }}')">
+                                                            Delete Video
+                                                        </a>
+
                                                     </div>
 
                                                     <div class="sm:px-4 p-2.5 pt-0 mt-4">
@@ -249,9 +253,8 @@
                                             <a href="#"> <h4 class="text-black dark:text-white" style="margin-top: 10px; font-size: 20px;" > {{ hid }} </h4> </a>
                                         </div>
                                     </div>
-                                        <div class="sm:px-4 pt-0 mt-7 p-8" style="font-size: 25px;" >
-                                            No Data
-                                        </div>
+                                    <div class="sm:px-4 pt-0 mt-7 p-8" style="font-size: 25px;" >
+                                        No Data
                                     </div>
                                 </div>
                             </div>
@@ -270,6 +273,26 @@
 
         <!-- Uikit js you can use cdn  https://getuikit.com/docs/installation  or fine the latest  https://getuikit.com/docs/installation -->
         <script src="{% static 'assets/js/uikit.min.js' %}"></script>
+        <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+        <script type="text/javascript" >
+            function Delete(id) {
+                let text = "Are you sure?\nDelete Story ?";
+                if (confirm(text) === true) {
+                    $.ajax({
+                        url: '/delete/',
+                        data: {'id': id, csrfmiddlewaretoken: '{{ csrf_token }}' },
+                        dataType: 'JSON',
+                        method: 'POST',
+                        success: function (data) {
+                            window.location.href = data.href;
+                        },
+                        error: function () {
+                            window.location.href = "/";
+                        },
+                    });
+                }
+            }
+        </script>
 
     </body>
 

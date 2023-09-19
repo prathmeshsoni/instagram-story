@@ -1,11 +1,11 @@
 import json
 import os
+from datetime import datetime, timedelta
 
 import pymysql
+import pytz
 import requests
 from lxml import html
-from datetime import datetime, timedelta
-import pytz
 
 
 def convert_unix_timestamp(timestamp):
@@ -67,7 +67,7 @@ class intsa_story:
         con = self.db_connection()
         cursor = con.cursor()
 
-        insert_stmt = (
+        update_stmt = (
             f"UPDATE {self.table_name} "
             f"SET `story_link` = %s "
             f"WHERE id = %s"
@@ -77,12 +77,33 @@ class intsa_story:
             s_id
         )
         try:
-            cursor.executemany(insert_stmt, [update_value])
+            cursor.executemany(update_stmt, [update_value])
             con.commit()
             print('Insert Data')
         except Exception as e:
             pass
             # print(f"Error while Data INSERT from {e}")
+
+    def delete_data(self, url, main_url):
+        con = self.db_connection()
+        cursor = con.cursor()
+
+        delete_stmt = (
+            f"DELETE FROM {self.table_name} "
+            f"WHERE story_link = %s"
+        )
+        delete_value = (
+            url
+        )
+        try:
+            cursor.executemany(delete_stmt, [delete_value])
+            con.commit()
+        except Exception as e:
+            pass
+        try:
+            os.remove(main_url)
+        except:
+            pass
 
     def page_req(self):
         temp_session = self.temp_session
@@ -457,7 +478,6 @@ class intsa_story:
             temp_time = k['expiring_at']
             story_time, testing_time = convert_unix_timestamp(int(temp_time))
 
-
             tags = ", ".join(tags)
             if video == 1:
                 Linkl = f'uploads/{user_names}/{story_id}.mp4'
@@ -469,7 +489,7 @@ class intsa_story:
                 'Tag': tags,
                 'main_time': {
                     'media_path': media_path,
-                    'testing_time': testing_time
+                    'testing_time': testing_time,
                 }
             }
             temp_items = (

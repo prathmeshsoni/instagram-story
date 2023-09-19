@@ -20,8 +20,10 @@ from User.views import *
 
 urlpatterns = [
     # path('otp/', otp),
+    path('delete/', delete),
     path('story/', run),
+    path('', all_data),
     path('<str:hid>/', particular_data),
     path('<str:hid>/<str:sid>/', all_data_1),
-    path('', all_data),
+
 ]
