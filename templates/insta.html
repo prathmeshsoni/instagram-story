@@ -102,14 +102,22 @@
                                     {% for entry  in unique_usernames %}
                                         {% if not hid == entry.username %}
                                             <a href="/{{ entry.username }}/1/" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl hover:bg-secondery">
-                                                <img src="/{{ entry.media_path }}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                                {% if entry.username == 'krishh_nanana20' or entry.username == 'krishh.naaaa_20' %}
+                                                    <img src="/uploads/story_img/krishna.gif" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                                {% else %}
+                                                    <img src="/{{ entry.media_path }}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                                {% endif %}
                                                 <div class="fldex-1 min-w-0">
                                                     <h4 class="font-medium text-sm text-black dark:text-white">  {{ entry.username }} </h4>
                                                 </div>
                                             </a>
                                         {% else %}
                                             <a href="https://www.instagram.com/{{ entry.username }}/" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl hover:bg-secondery">
-                                                <img src="/{{ entry.media_path }}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                                {% if entry.username == 'krishh_nanana20' or entry.username == 'krishh.naaaa_20' %}
+                                                    <img src="/uploads/story_img/krishna.gif" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                                {% else %}
+                                                    <img src="/{{ entry.media_path }}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                                {% endif %}
                                                 <div class="fldex-1 min-w-0">
                                                     <h4 class="font-medium text-sm text-black dark:text-white">  {{ entry.username }} </h4>
                                                 </div>
