@@ -149,11 +149,12 @@
                                                     <div class="md:w-20 md:h-20 w-20 h-20 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
 
                                                         {% if datas.main_time.media_path %}
-                                                            {% if i == 'krishh.naaaa_20'  %}
-                                                                <img src="/uploads/story_img/krishna.gif" alt="" class="absolute w-full h-full object-cover">
-                                                            {% else %}
-                                                                <img src="/{{ datas.main_time.media_path }}" alt="" class="absolute w-full h-full object-cover">
-                                                            {% endif %}
+{#                                                            {% if i == 'krishh.naaaa_20'  %}#}
+{#                                                                <img src="/uploads/story_img/krishna.gif" alt="" class="absolute w-full h-full object-cover">#}
+{#                                                            {% else %}#}
+{#                                                            {% endif %}#}
+                                                            <img src="/{{ datas.main_time.media_path }}" alt="" class="absolute w-full h-full object-cover">
+
                                                         {% else %}
                                                             <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="absolute w-full h-full object-cover">
                                                         {% endif %}
@@ -193,7 +194,11 @@
                                                     {% if i == 'krishh_nanana20' or i == 'krishh.naaaa_20' %}
                                                         <img src="/uploads/story_img/krishna.gif" alt="" class="w-9 h-9 rounded-full">
                                                     {% else %}
-                                                        <img src="/{{ s.0.main_time.media_path }}" alt="" class="w-9 h-9 rounded-full">
+                                                        {% if i == 'krishh_nanana20' or i == 'krishh.naaaa_20' %}
+                                                            <img src="/uploads/story_img/krishna.gif" alt="" class="w-9 h-9 rounded-full">
+                                                        {% else %}
+                                                            <img src="/{{ s.0.main_time.media_path }}" alt="" class="w-9 h-9 rounded-full">
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% else %}
                                                     <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="w-9 h-9 rounded-full">
