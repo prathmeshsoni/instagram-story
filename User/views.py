@@ -29,6 +29,7 @@ def run(request):
     check = intsa_story().main_file()
     if check:
         check['unique_usernames'] = unique_usernames
+        check['title'] = 'Stories • Instagram'
         return render(request, 'insta.html', check)
     else:
         return redirect('/')
@@ -43,6 +44,7 @@ def all_data(request):
         datas = intsa_story().main_file_prathmesh(search_username)
         if datas:
             datas['unique_usernames'] = unique_usernames
+            datas['title'] = f'Stories • {search_username}'
             return render(request, 'insta.html', datas)
         else:
             return redirect(f'/{search_username}/')
@@ -57,14 +59,15 @@ def all_data(request):
             datas = {
                 'categorized_data': categorized_data,
                 'count': count,
-                'unique_usernames': unique_usernames
             }
         except:
             datas = {
                 'categorized_data': '',
                 'count': 0,
-                'unique_usernames': unique_usernames
             }
+
+        datas['unique_usernames'] = unique_usernames
+        datas['title'] = 'Stories • Instagram'
 
         return render(request, 'insta.html', datas)
 
@@ -92,16 +95,16 @@ def all_data_1(request, hid, sid):
         datas = {
             'categorized_data': categorized_data,
             'count': count,
-            'unique_usernames': unique_usernames,
-            'hid': hid
         }
     except:
         datas = {
             'categorized_data': '',
             'count': 0,
-            'unique_usernames': unique_usernames,
-            'hid': hid
         }
+
+    datas['hid'] = hid
+    datas['unique_usernames'] = unique_usernames
+    datas['title'] = f'Stories • {hid}'
 
     return render(request, 'insta.html', datas)
 
@@ -169,17 +172,24 @@ def dual_fun(hid):
 
         if con == 3:
             datas = test(hid)
+            datas['title'] = f'Stories • {hid}'
+
+        elif con == 1:
+            datas = test_1(hid)
+            datas['title'] = 'Stories • Instagram'
         else:
             datas = test_1(hid)
-        datas['unique_usernames'] = unique_usernames
-        datas['hid'] = hid
+            datas['title'] = f'Stories • {hid}'
+
+
     except:
         datas = {
             'Nodata': "Nodata",
             'count': 0,
-            'unique_usernames': unique_usernames,
-            'hid': hid
+            'title': 'Stories • Instagram'
         }
+    datas['hid'] = hid
+    datas['unique_usernames'] = unique_usernames
     return datas
 
 

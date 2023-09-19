@@ -15,7 +15,7 @@
 	    <link rel="short icon" sizes="120x120" href="https://static.cdninstagram.com/rsrc.php/v3/ys/r/aM-g435MtEX.png" />
 
         <!-- title and description-->
-        <title>Stories • Instagram</title>
+        <title>{{ title }}</title>
         <!-- css files -->
         <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
         <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
@@ -190,7 +190,7 @@
                                         <div class="flex gap-3 sm:p-4 border-b-2 mb-3 p-2.5 text-sm font-medium">
                                             <a href="/{{ i }}/">
                                                 {% if s.0.main_time.media_path %}
-                                                    {% if i == 'krishh_nanana20'  %}
+                                                    {% if i == 'krishh_nanana20' or i == 'krishh.naaaa_20' %}
                                                         <img src="/uploads/story_img/krishna.gif" alt="" class="w-9 h-9 rounded-full">
                                                     {% else %}
                                                         <img src="/{{ s.0.main_time.media_path }}" alt="" class="w-9 h-9 rounded-full">
