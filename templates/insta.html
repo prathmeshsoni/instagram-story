@@ -149,7 +149,11 @@
                                                     <div class="md:w-20 md:h-20 w-20 h-20 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden dark:border-slate-700">
 
                                                         {% if datas.main_time.media_path %}
-                                                            <img src="/{{ datas.main_time.media_path }}" alt="" class="absolute w-full h-full object-cover">
+                                                            {% if i == 'krishh.naaaa_20'  %}
+                                                                <img src="https://private-app.monarksoni.com/static/user/folder/assets/images/avtar/krishna.gif" alt="" class="absolute w-full h-full object-cover">
+                                                            {% else %}
+                                                                <img src="/{{ datas.main_time.media_path }}" alt="" class="absolute w-full h-full object-cover">
+                                                            {% endif %}
                                                         {% else %}
                                                             <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="absolute w-full h-full object-cover">
                                                         {% endif %}
