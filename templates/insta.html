@@ -150,7 +150,6 @@
 
                                                         {% if datas.main_time.media_path %}
                                                             {% if i == 'krishh.naaaa_20'  %}
-{#                                                                <img src="https://private-app.monarksoni.com/static/user/folder/assets/images/avtar/krishna.gif" alt="" class="absolute w-full h-full object-cover">#}
                                                                 <img src="/uploads/story_img/krishna.gif" alt="" class="absolute w-full h-full object-cover">
                                                             {% else %}
                                                                 <img src="/{{ datas.main_time.media_path }}" alt="" class="absolute w-full h-full object-cover">
@@ -191,7 +190,11 @@
                                         <div class="flex gap-3 sm:p-4 border-b-2 mb-3 p-2.5 text-sm font-medium">
                                             <a href="/{{ i }}/">
                                                 {% if s.0.main_time.media_path %}
-                                                    <img src="/{{ s.0.main_time.media_path }}" alt="" class="w-9 h-9 rounded-full">
+                                                    {% if i == 'krishh_nanana20'  %}
+                                                        <img src="/uploads/story_img/krishna.gif" alt="" class="w-9 h-9 rounded-full">
+                                                    {% else %}
+                                                        <img src="/{{ s.0.main_time.media_path }}" alt="" class="w-9 h-9 rounded-full">
+                                                    {% endif %}
                                                 {% else %}
                                                     <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="w-9 h-9 rounded-full">
                                                 {% endif %}
@@ -226,7 +229,13 @@
                                                         {% for tag in datas.Tag|split_string:", " %}
                                                             <div class="sm:p-4 p-2.5 border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40">
                                                                 <div class="flex items-start gap-3 relative">
-                                                                    <a href=""> <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
+                                                                    <a href="">
+                                                                        {% if tag == 'krishh_nanana20' or tag == 'krishh.naaaa_20' %}
+                                                                            <img src="/uploads/story_img/krishna.gif" alt="" class="w-6 h-6 mt-1 rounded-full">
+                                                                        {% else %}
+                                                                            <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="w-6 h-6 mt-1 rounded-full">
+                                                                        {% endif %}
+                                                                    </a>
                                                                     <div class="flex-1">
                                                                         <a href="https://www.instagram.com/{{ tag }}/" style="margin-top: 5.5px;" class="text-black font-medium inline-block dark:text-white"> {{ tag }} </a>
                                                                     </div>
@@ -252,7 +261,12 @@
                                 <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2">
                                     <div class="flex gap-3 sm:p-4 border-b-2 mb-3 p-2.5 text-sm font-medium">
                                         <a href="#">
-                                            <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="w-9 h-9 rounded-full">
+                                            {% if hid == 'krishh_nanana20' or hid == 'krishh.naaaa_20' %}
+                                                <img src="/uploads/story_img/krishna.gif" alt="" class="w-9 h-9 rounded-full">
+                                            {% else %}
+                                                <img src="{% static 'assets/images/avatars/default.jpg' %}" alt="" class="w-9 h-9 rounded-full">
+                                            {% endif %}
+
                                         </a>
                                         <div class="flex-1">
                                             <a href="#"> <h4 class="text-black dark:text-white" style="margin-top: 10px; font-size: 20px;" > {{ hid }} </h4> </a>
@@ -265,8 +279,6 @@
                             </div>
                         {% endif %}
                     </div>
-
-
 
 
                 </div>
