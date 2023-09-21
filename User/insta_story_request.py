@@ -530,11 +530,13 @@ class intsa_story:
     def main_file(self):
         print('Login Start..')
 
-        cookies = {'csrftoken': 'PqkUWLfkVV1Gy8JgsbnkucdXeNd0eCoI',
-                   'rur': '"CCO\\05444792568188\\0541726591894:01f769636cea41fa8eb2518a268a642af200c18de233b1f4d4fc132c569a6dc6a7020844"',
-                   'mid': 'ZQiAEgALAAH5wwEBh_yWrt6vaiME', 'ds_user_id': '44792568188',
-                   'ig_did': '73A0831C-49DF-487E-87AB-1574FA83322A',
-                   'sessionid': '44792568188%3ALAUSliqQqvti1a%3A26%3AAYcRZeHr4Fe72euaRBu_Si19cQDmER3Y3MLoK7p1lg'}
+        cookies = {
+            'csrftoken': 'PqkUWLfkVV1Gy8JgsbnkucdXeNd0eCoI',
+            'rur': '"CCO\\05444792568188\\0541726591894:01f769636cea41fa8eb2518a268a642af200c18de233b1f4d4fc132c569a6dc6a7020844"',
+            'mid': 'ZQiAEgALAAH5wwEBh_yWrt6vaiME', 'ds_user_id': '44792568188',
+            'ig_did': '73A0831C-49DF-487E-87AB-1574FA83322A',
+            'sessionid': '44792568188%3ALAUSliqQqvti1a%3A26%3AAYcRZeHr4Fe72euaRBu_Si19cQDmER3Y3MLoK7p1lg'
+        }
         csrf_token = self.page_req()
         cookies['csrftoken'] = csrf_token
         # cookies = self.req_login(csrf_token)
