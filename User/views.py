@@ -6,14 +6,23 @@ from pytz import timezone
 
 from User.insta_story_request import intsa_story
 from User.models import StoryModel
+from django.contrib.auth.decorators import login_required
+        
 
 
+def login(request):
+    return redirect('/admin_side/login/?next=/')
+
+@login_required(login_url='/admin/')
 def delete(request):
     if request.method == 'POST':
         url = request.POST.get('id')
         fianl_url = f'/home/instagramstory/instagram-story/{url}'
         # fianl_url = f'C:/prathmesh/update_project/instagram-story/{url}'
-        intsa_story().delete_data(url, fianl_url)
+        try:
+            intsa_story().delete_data(url, fianl_url)
+        except:
+            pass
         a = {
             'status': True,
             'href': request.META.get('HTTP_REFERER')
@@ -23,10 +32,13 @@ def delete(request):
         return redirect('/')
 
 
+@login_required(login_url='/admin/')
 def run(request):
     unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
-
-    check = intsa_story().main_file()
+    try:
+        check = intsa_story().main_file()
+    except:
+        check = ''
     if check:
         check['unique_usernames'] = unique_usernames
         check['title'] = 'Stories • Instagram'
@@ -35,13 +47,17 @@ def run(request):
         return redirect('/')
 
 
+@login_required(login_url='/admin/')
 def all_data(request):
     unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
     if request.method == 'POST':
         search_username = "".join(request.POST.get('search_username')).strip().lower()
         # verificationCode = request.POST.get('verificationCode')
         # if not verificationCode:
-        datas = intsa_story().main_file_prathmesh(search_username)
+        try:
+            datas = intsa_story().main_file_prathmesh(search_username)
+        except:
+            datas = ''
         if datas:
             datas['unique_usernames'] = unique_usernames
             datas['title'] = f'Stories • {search_username}'
@@ -72,12 +88,14 @@ def all_data(request):
         return render(request, 'insta.html', datas)
 
 
+@login_required(login_url='/admin/')
 def particular_data(request, hid):
     datas = dual_fun(hid)
 
     return render(request, 'insta.html', datas)
 
 
+@login_required(login_url='/admin/')
 def all_data_1(request, hid, sid):
     unique_usernames = StoryModel.objects.values('username', 'media_path').distinct()
     try:

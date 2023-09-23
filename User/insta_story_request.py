@@ -30,10 +30,10 @@ class intsa_story:
         self.temp_session = requests.Session()
         self.test_username = ''
 
-        self.db_host = 'instagramstory.mysql.pythonanywhere-services.com'
-        self.db_user = 'instagramstory'
-        self.db_password = 'Mksoni18091'
-        self.db_name = 'instagramstory$instagram_storys'
+        self.db_host = 'localhost'
+        self.db_user = 'prathmes_admin'
+        self.db_password = 'Lookathersmile'
+        self.db_name = 'prathmes_instagram'
         self.table_name = 'User_storymodel'
 
         # self.db_host = 'localhost'
@@ -431,7 +431,7 @@ class intsa_story:
             media_path = json_text['reels'][f"{params['reel_ids']}"]['user']['profile_pic_url']
 
             # i_path = os.path.join('C:\\prathmesh\\update_project\\instagram-story\\uploads', pk)
-            i_path = os.path.join('/home/instagramstory/instagram-story/uploads', pk)
+            i_path = os.path.join('/home3/prathmes/instagram.prathmeshsoni.works/instagram/uploads', pk)
             try:
                 os.mkdir(i_path)
                 try:
@@ -505,7 +505,7 @@ class intsa_story:
             if test_con:
                 if video_url:
                     # path = os.path.join('C:\\prathmesh\\update_project\\instagram-story\\uploads', user_names)
-                    path = os.path.join('/home/instagramstory/instagram-story/uploads', user_names)
+                    path = os.path.join('/home3/prathmes/instagram.prathmeshsoni.works/instagram/uploads', user_names)
                     try:
                         os.mkdir(path)
                     except:
@@ -652,3 +652,6 @@ class intsa_story:
 
 if __name__ == '__main__':
     intsa_story().main_file()
+    # test = intsa_story().main_file_prathmesh('krishh.naaaa_20')
+    # test =  os.getcwd()
+    # print(test)

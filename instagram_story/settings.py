@@ -24,6 +24,7 @@ SECRET_KEY = 'bjta_skkuxizj=!!jj_dhq)b+esku!vtp13-=*1%^bth2fsg4v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -52,12 +54,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'instagram_story.urls'
 
-SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+
+# SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(SETTINGS_PATH, 'templates')],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +76,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'instagram_story.wsgi.application'
+
+# LOGIN_URL = '/' 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -88,10 +97,10 @@ WSGI_APPLICATION = 'instagram_story.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'instagramstory$instagram_storys',
-        'HOST': 'instagramstory.mysql.pythonanywhere-services.com',
-        'USER': 'instagramstory',
-        'PASSWORD': 'Mksoni18091',
+        'NAME': 'prathmes_instagram',
+        'HOST': 'localhost',
+        'USER': 'prathmes_admin',
+        'PASSWORD': 'Lookathersmile',
     },
 }
 
@@ -130,7 +139,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/instagramstory/instagram-story/static'
+STATIC_ROOT = BASE_DIR / "static"
+# STATIC_ROOT = '/home/instagramstory/instagram-story/static'
 # STATICFILES_DIRS = [
 #     BASE_DIR / "static",
 # ]

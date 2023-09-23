@@ -18,8 +18,17 @@ from django.urls import path
 
 from User.views import *
 
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+    
+
 urlpatterns = [
-    # path('otp/', otp),
+    path('admin_side/', admin.site.urls),
+    path('logout/',
+        auth_views.LogoutView.as_view(),
+        name = 'logout'
+    ),
+    path('admin/', login),
     path('delete/', delete),
     path('story/', run),
     path('', all_data),
